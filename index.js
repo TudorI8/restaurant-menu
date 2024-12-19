@@ -31,10 +31,13 @@ function mapMenuToTable(menuData) {
         const row = document.createElement('tr');
 
         const imageCell = document.createElement('td');
+        const imageLink = document.createElement('a');
+        imageLink.href = `pages/details.html?id=${dishKey}`;
         const image = document.createElement('img');
         image.src = getCorrectImageUrl(dishKey, dish.imagine);
         image.alt = dish.nume;
-        imageCell.appendChild(image);
+        imageLink.appendChild(image);
+        imageCell.appendChild(imageLink);
 
         const nameCell = document.createElement('td');
         const nameLink = document.createElement('a');
@@ -52,7 +55,6 @@ function mapMenuToTable(menuData) {
         menuTable.appendChild(row);
     });
 }
-
 
 window.addEventListener('DOMContentLoaded', async () => {
     const menuData = await getMenuData();

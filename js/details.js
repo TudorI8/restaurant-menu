@@ -28,7 +28,21 @@ function getCorrectImageUrl(id, originalUrl) {
     return IMAGE_OVERRIDES[id] || originalUrl;
 }
 
-function displayMenuDetails(menu, menuId) {
+async function getRecipeFromLocal(menuId) {
+    try {
+        const response = await fetch("../menu.json");
+        if (!response.ok) {
+            throw new Error("Failed to fetch local recipe data");
+        }
+        const recipeData = await response.json();
+        return recipeData[menuId] ? recipeData[menuId].reteta : null;
+    } catch (error) {
+        console.error("Error fetching local recipe data:", error);
+        return null;
+    }
+}
+
+async function displayMenuDetails(menu, menuId) {
     const detailsContainer = document.querySelector('.main');
 
     if (!detailsContainer) {
@@ -42,14 +56,23 @@ function displayMenuDetails(menu, menuId) {
     const image = document.createElement('img');
     image.src = getCorrectImageUrl(menuId, menu.imagine);
     image.alt = menu.nume;
-    image.style.maxWidth = "400px"; // Stil opțional
 
     const ingredients = document.createElement('p');
     ingredients.textContent = `Ingrediente: ${menu.ingrediente}`;
 
+    const recipe = document.createElement('p');
+    const localRecipe = await getRecipeFromLocal(menuId);
+
+    if (menu.reteta || localRecipe) {
+        recipe.textContent = `Rețeta: ${menu.reteta || localRecipe}`;
+    } else {
+        recipe.textContent = "Rețeta nu este disponibilă.";
+    }
+
     detailsContainer.appendChild(title);
     detailsContainer.appendChild(image);
     detailsContainer.appendChild(ingredients);
+    detailsContainer.appendChild(recipe);
 }
 
 window.addEventListener('DOMContentLoaded', async () => {
