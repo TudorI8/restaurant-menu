@@ -29,29 +29,42 @@ async function displayMenuDetails(menu, menuId) {
         return;
     }
 
-    const title = document.createElement('h1');
-    title.textContent = menu.nume;
+    const card = document.createElement('div');
+    card.classList.add('card-details', 'flex', 'p-20', 'br-10');
 
+    const imageContainer = document.createElement('div');
+    imageContainer.classList.add('card-image', 'flex', 'justify-center', 'items-center');
     const image = document.createElement('img');
     image.src = getCorrectImageUrl(menuId, menu.imagine);
     image.alt = menu.nume;
+    imageContainer.appendChild(image);
+
+    const details = document.createElement('div');
+    details.classList.add('card-content', 'flex', 'flex-column', 'justify-center');
+
+    const title = document.createElement('h1');
+    title.textContent = menu.nume;
 
     const ingredients = document.createElement('p');
-    ingredients.textContent = `Ingrediente: ${menu.ingrediente}`;
+    ingredients.innerHTML = `<strong>Ingrediente:</strong> ${menu.ingrediente}`;
 
     const recipe = document.createElement('p');
     const localRecipe = await getRecipeFromLocal(menuId);
 
     if (menu.reteta || localRecipe) {
-        recipe.textContent = `Rețeta: ${menu.reteta || localRecipe}`;
+        recipe.innerHTML = `<strong>Rețetă:</strong> ${menu.reteta || localRecipe}`;
     } else {
         recipe.textContent = "Rețeta nu este disponibilă.";
     }
 
-    detailsContainer.appendChild(title);
-    detailsContainer.appendChild(image);
-    detailsContainer.appendChild(ingredients);
-    detailsContainer.appendChild(recipe);
+    details.appendChild(title);
+    details.appendChild(ingredients);
+    details.appendChild(recipe);
+
+    card.appendChild(imageContainer);
+    card.appendChild(details);
+
+    detailsContainer.appendChild(card);
 }
 
 window.addEventListener('DOMContentLoaded', async () => {
