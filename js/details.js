@@ -40,7 +40,7 @@ async function displayMenuDetails(menu, menuId) {
     imageContainer.appendChild(image);
 
     const details = document.createElement('div');
-    details.classList.add('card-content', 'flex', 'flex-column', 'justify-center');
+    details.classList.add('card-content', 'flex', 'flex-col', 'justify-center');
 
     const title = document.createElement('h1');
     title.textContent = menu.nume;
